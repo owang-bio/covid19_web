@@ -1,0 +1,31 @@
+body {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto auto;
+}
+
+header {
+    height: 100%;
+    background: linear-gradient(45deg, rgb(18, 18, 63) 0%, rgba(36,136,181,1) 80%, rgba(0,212,255,1) 100%);
+    grid-column: 1 / 13;
+}
+
+#title {
+    color: white;
+    padding: 4% 0% 5% 3%;
+    font-family: 'Abril Fatface', cursive;
+    font-size: 38px;
+}
+
+.nav-bar {
+    text-align: right;
+}
+
+.nav-sub ol {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.nav-sub {
+    display: inline-block;
+}

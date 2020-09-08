@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 
 def create_app(test_config=None):
     # create and configure the app
@@ -22,10 +22,10 @@ def create_app(test_config=None):
     except OSError:
         pass
     
-    @app.route('/hello')
+    @app.route('/')
     def hello():
         # print(app.config)
-        return 'Hello, World!'
+        return render_template('base.html')
     
     from . import mobility
     app.register_blueprint(mobility.bp)
