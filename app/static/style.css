@@ -12,20 +12,53 @@ header {
 
 #title {
     color: white;
-    padding: 4% 0% 5% 3%;
+    /* padding: 4% 0% 5% 3%; */
+    padding: 2% 0% 2% 7%;
     font-family: 'Abril Fatface', cursive;
     font-size: 38px;
 }
 
 .nav-bar {
-    text-align: right;
-}
-
-.nav-sub ol {
-    list-style-type: none;
-    padding-left: 0;
+    padding-left: 8%;
+    color: black;
+    display: flex;
 }
 
 .nav-sub {
-    display: inline-block;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+    background: white;
+    text-align: center;
+    margin: 0 0 0 0.2%;
 }
+
+.nav-sub:hover {
+    border-bottom: 0.5px solid;
+    border-color: rgb(18, 18, 63);
+    color: rgb(221, 202, 27);
+}
+
+.summary {
+    grid-column: 2 / 11;
+}
+
+.graph {
+    grid-column: 2 / 11;
+}
+
+.summary {
+    display: flex;
+}
+
+.sum {
+    padding: 5%;
+    width: 40%;
+}
+
+.tab {
+    padding: 5%;
+    width: 40%;
+}
+

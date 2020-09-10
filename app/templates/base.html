@@ -12,14 +12,19 @@
     <header>
         <h1 id="title">Just Another Site about Covid-19</h1>
         <nav class="nav-bar">
-            <ol>
-                <li class="nav-sub">Bikes</li>
-                <li class="nav-sub">BMX</li>
-                <li class="nav-sub">Jump</li>
-            </ol>
+            <h4 class="nav-sub">Traffic Impact</h6>
+            <h4 class="nav-sub">US Facts</h6>
+            <h4 class="nav-sub">Symptom Forcast</h6>
         </nav>
     </header>
 
+    <section class="summary">
+        {% block summary %}{% endblock %}
+    </section>
+
+    <section class="graph">
+        {% block graph %}{% endblock %}
+    </section>
 
 </body>
 </html>

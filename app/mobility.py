@@ -4,7 +4,7 @@ bp = Blueprint('mobility', __name__, url_prefix='/mobility')
 
 @bp.route('/air')
 def air_traffic():
-    return 'haha'
+    return render_template('mobility/mobility.html')
 
 @bp.route('/city')
 def city_congestion():
