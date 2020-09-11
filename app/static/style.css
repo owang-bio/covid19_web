@@ -5,14 +5,13 @@ body {
 }
 
 header {
-    height: 100%;
     background: linear-gradient(45deg, rgb(18, 18, 63) 0%, rgba(36,136,181,1) 80%, rgba(0,212,255,1) 100%);
     grid-column: 1 / 13;
+    padding: 3% 0 0 0;
 }
 
 #title {
     color: white;
-    /* padding: 4% 0% 5% 3%; */
     padding: 2% 0% 2% 7%;
     font-family: 'Abril Fatface', cursive;
     font-size: 38px;
@@ -35,30 +34,30 @@ header {
 }
 
 .nav-sub:hover {
-    border-bottom: 0.5px solid;
-    border-color: rgb(18, 18, 63);
     color: rgb(221, 202, 27);
 }
 
 .summary {
-    grid-column: 2 / 11;
+    grid-column: 1 / 13;
+    background: rgba(241, 236, 202, 0.6);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.description {
+    padding: 5% 5% 5% 0%;
+    grid-column: 2 / 6;
+    text-indent: 10%;
+    text-align: justify;
+    line-height: 1.6;
+}
+
+.table {
+    padding: 5% 5% 5% 0%;
+    grid-column: 8 / 12;
 }
 
 .graph {
-    grid-column: 2 / 11;
-}
-
-.summary {
-    display: flex;
-}
-
-.sum {
-    padding: 5%;
-    width: 40%;
-}
-
-.tab {
-    padding: 5%;
-    width: 40%;
+    grid-column: 1 / 13;
 }
 
