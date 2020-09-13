@@ -1,3 +1,4 @@
+# export GOOGLE_APPLICATION_CREDENTIALS="/home/owang/.google/BigQuery.json"
 from google.cloud import bigquery
 import pandas as pd
 
@@ -16,7 +17,7 @@ select date
  , cumulative_confirmed_cases
  , cumulative_confirmed_cases - first_value(cumulative_confirmed_cases) over (diff) as daily_cases_growth
  , cumulative_deaths
- , cumulative_deaths - first_value(cumulative_deaths) over (diff) as daily_deaths_growth
+ , cumulative_deaths - first_value(cumulative_deaths) over (diff) as daily_death_growth
 from temp
 window diff as (
   order by date
@@ -26,5 +27,5 @@ window diff as (
 """
 
 client = bigquery.Client(project=project)
-query_job = client.query(query_string).to_dataframe()
-print(query_job)
+query_job = client.query(query).to_dataframe()
+query_job.to_csv('data/covid19_stat.csv')

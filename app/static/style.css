@@ -42,6 +42,7 @@ header {
     background: rgba(241, 236, 202, 0.6);
     display: grid;
     grid-template-columns: repeat(12, 1fr);
+    font-size: large;
 }
 
 .description {
@@ -49,12 +50,35 @@ header {
     grid-column: 2 / 6;
     text-indent: 10%;
     text-align: justify;
-    line-height: 1.6;
+    line-height: 1.8;
 }
 
 .table {
     padding: 5% 5% 5% 0%;
     grid-column: 8 / 12;
+}
+
+.covid-table {
+    width: 75%;
+    font-size: large;
+}
+
+.row-dt {
+    padding-top: 3%;
+}
+
+@media (max-width: 85em) {
+    .summary {
+        font-size: small;
+    }
+
+    .covid-table {
+        font-size: small;
+    }
+
+    .row-dt {
+        padding-top: 5%;
+    }
 }
 
 .graph {

@@ -1,21 +1,11 @@
 {% extends 'base.html' %}
 
-{% block summary %}
-    <div class="description">
-        <p id="mobility-desc">
-            Built this site because I was curious about the impact of 
-            Covid-19 on air and ground traffic, as well as the length of 
-            waiting time to entering and exiting the US. Also, I was a little 
-            tired of going to the other people's site to track the statistics 
-            about Covid-19.
-        </p>
-    </div>
-
-    <div class="table">
-        <p>Overview</p>
-        <table>
-        </table>
-    </div>
-{% endblock %}
+{% block description%}
+    <p> 
+        On the right, I put a brief summary about the number of cases and 
+        death. On the bottom it is plots showing how covid-19 has been 
+        impacting the traffic and border waiting time.
+    </p>
+{% endblock%}
 
 {% block graph %}{% endblock %}

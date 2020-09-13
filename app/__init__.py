@@ -27,6 +27,10 @@ def create_app(test_config=None):
         # print(app.config)
         return render_template('base.html')
     
+    @app.template_filter()
+    def num_format(value):
+        return f'{value:,}'
+    
     from . import mobility
     app.register_blueprint(mobility.bp)
 
