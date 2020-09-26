@@ -24,7 +24,6 @@ def create_app(test_config=None):
     
     @app.route('/')
     def hello():
-        # print(app.config)
         return render_template('base.html')
     
     @app.template_filter()

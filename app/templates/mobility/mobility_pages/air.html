@@ -1,0 +1,363 @@
+{% extends 'mobility/mobility.html' %}
+
+{% block head %}
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v2.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v3.min.js"></script>
+
+    <style>
+
+        path {
+          fill: #ccc;
+          stroke: #fff;
+          stroke-width: .5px;
+        }
+
+        .domain {
+         fill: none;
+         stroke-width: 0px;
+        }    
+
+        circle:hover {
+          fill: red;
+          opacity: 0.3;
+        }
+
+        .pic {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          padding-top: 3%;
+        }
+
+        .pic svg {
+          grid-column: 2/3;
+        }
+    </style>
+{% endblock %}
+
+{% block plots %}
+    <div class="pic"></div>
+
+    <script>
+        var width = 900;
+        var height = 600;
+
+        var data = [
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "San Francisco International",
+                    "percent_of_baseline": "65.0",
+                    "center_point_geom": "POINT(-122.38393507603 37.6211875471696)",
+                    "longitude": "-122.38393507603016",
+                    "latitude": "37.62118754716965"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Los Angeles International",
+                    "percent_of_baseline": "83.0",
+                    "center_point_geom": "POINT(-118.404993180627 33.941369379328)",
+                    "longitude": "-118.40499318062676",
+                    "latitude": "33.941369379328016"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Denver International",
+                    "percent_of_baseline": "70.0",
+                    "center_point_geom": "POINT(-104.700315559089 39.8643468206413)",
+                    "longitude": "-104.70031555908885",
+                    "latitude": "39.8643468206413"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Miami International ",
+                    "percent_of_baseline": "79.0",
+                    "center_point_geom": "POINT(-80.2887147460152 25.7957243107604)",
+                    "longitude": "-80.28871474601517",
+                    "latitude": "25.795724310760434"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Hartsfield-Jackson Atlanta International ",
+                    "percent_of_baseline": "62.0",
+                    "center_point_geom": "POINT(-84.4279188822754 33.6410758198944)",
+                    "longitude": "-84.42791888227545",
+                    "latitude": "33.64107581989442"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Daniel K. Inouye International ",
+                    "percent_of_baseline": "90.0",
+                    "center_point_geom": "POINT(-157.918285204569 21.3259652488767)",
+                    "longitude": "-157.9182852045686",
+                    "latitude": "21.325965248876734"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Chicago OHare International",
+                    "percent_of_baseline": "75.0",
+                    "center_point_geom": "POINT(-87.9105952039514 41.9804600429329)",
+                    "longitude": "-87.91059520395136",
+                    "latitude": "41.980460042932876"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Boston Logan International ",
+                    "percent_of_baseline": "65.0",
+                    "center_point_geom": "POINT(-71.0102909977065 42.3636330376787)",
+                    "longitude": "-71.0102909977065",
+                    "latitude": "42.36363303767867"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Detroit Metropolitan Wayne County ",
+                    "percent_of_baseline": "57.99999999999999",
+                    "center_point_geom": "POINT(-83.3537314720423 42.2129725988552)",
+                    "longitude": "-83.35373147204234",
+                    "latitude": "42.212972598855245"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Charlotte Douglas International",
+                    "percent_of_baseline": "99.0",
+                    "center_point_geom": "POINT(-80.9478114283204 35.2136892261228)",
+                    "longitude": "-80.94781142832036",
+                    "latitude": "35.21368922612275"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Newark Liberty International ",
+                    "percent_of_baseline": "100.0",
+                    "center_point_geom": "POINT(-74.1751246689879 40.6915033838306)",
+                    "longitude": "-74.17512466898788",
+                    "latitude": "40.69150338383058"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "McCarran International",
+                    "percent_of_baseline": "54.0",
+                    "center_point_geom": "POINT(-115.14888081287 36.082853976328)",
+                    "longitude": "-115.14888081287033",
+                    "latitude": "36.08285397632799"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "LaGuardia",
+                    "percent_of_baseline": "62.0",
+                    "center_point_geom": "POINT(-73.8732455278797 40.7738834966785)",
+                    "longitude": "-73.87324552787966",
+                    "latitude": "40.77388349667847"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "John F. Kennedy International",
+                    "percent_of_baseline": "64.0",
+                    "center_point_geom": "POINT(-73.7784465295804 40.6460265940045)",
+                    "longitude": "-73.77844652958036",
+                    "latitude": "40.64602659400453"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Dallas/Fort Worth International ",
+                    "percent_of_baseline": "95.0",
+                    "center_point_geom": "POINT(-97.0394983968728 32.8940590356408)",
+                    "longitude": "-97.03949839687276",
+                    "latitude": "32.89405903564077"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Washington Dulles International ",
+                    "percent_of_baseline": "81.0",
+                    "center_point_geom": "POINT(-77.4427728838621 38.9475939204352)",
+                    "longitude": "-77.44277288386208",
+                    "latitude": "38.94759392043519"
+                    },
+                    {
+                    "date": "2020-09-15",
+                    "airport_name": "Seattle-Tacoma International ",
+                    "percent_of_baseline": "61.0",
+                    "center_point_geom": "POINT(-122.308661576118 47.4505828917119)",
+                    "longitude": "-122.3086615761185",
+                    "latitude": "47.45058289171188"
+                    }
+                ];
+  
+
+        // projection & path generator
+        var path = d3.geo.path();
+        var projection = d3.geoAlbersUsa()
+        var path = d3.geoPath()
+        .pointRadius(5)
+        .projection(projection);
+
+        // prepare cavas
+        var svg = d3.select(".pic")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            // .attr('viewBox', '-300 0 1800 1200')
+            ;
+
+        // prepare tooltip
+        var tooltip = d3.select('.pic').append('div')
+            .attr('class', 'tooltip')
+            .style("position", "absolute")
+            .style("visibility", "hidden")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "1px")
+            .style("border-radius", "6px")
+            .style("padding", "3px")
+            .style("font-size", "small");
+
+        // geo map, 
+        var url = "https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json"
+        d3.json(url, function(error, topology) {
+            if (error) throw error;
+
+            // console.log("topojson", topology)
+            // convert topojson to geojson
+            var geojson = topojson.feature(topology, topology.objects.states);
+            // console.log("geojson", geojson)
+            // draw map
+            svg.append('g')
+            .attr('class', 'map')
+            .selectAll("path")
+            .data(geojson.features)
+            .enter()
+            .append("path")
+            .attr("d", path);
+
+            // append points, label, tooltips
+            svg.append('g')
+                .attr('class', 'points')
+                .selectAll("circle")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr('class', 'airport')
+                .attr('cx', (e) => projection([e.longitude, e.latitude])[0])
+                .attr('cy', (e) => projection([e.longitude, e.latitude])[1])
+                .attr('r', (e) => {
+                if (/Kennedy|Newark|LaGuardia/.test(e.airport_name)) {
+                    return 6;
+                } else {
+                    return 8;
+                }
+                })
+                .attr('fill', (e) => colorScale(parseInt(e.percent_of_baseline)/100))
+                .on("mouseover", () => {
+                tooltip.style("visibility", "visible");
+                })
+                .on("mousemove", function (e) {
+
+                let xPox = d3.mouse(this)[0];
+                let yPox = d3.mouse(this)[1];
+                
+                return tooltip.html(
+                    "<p>Date: " + e.date + "</p>"
+                    + "<p>Airport: " + e.airport_name + "</p>"
+                    + "<p>Percentage of baseline: " 
+                    + Math.round(e.percent_of_baseline*100)/100 + "%</p>")
+                .style("top", (d3.event.pageY - 25) +"px")
+                .style("left", (d3.event.pageX + 25) +"px")
+                ;
+
+                })
+                .on("mouseout", () => {
+                return tooltip.style("visibility", "hidden");;
+                })
+                ;
+
+            svg.append('g')
+                .attr('class', 'airpoirt')
+                .selectAll('text')
+                .data(data)
+                .enter()
+                .append('text')
+                .text((e) => e.airport_name.replace('International', ''))
+                .attr('x', (e) => {
+                if (/Detroit/.test(e.airport_name)) {
+                    return projection([e.longitude, e.latitude])[0] - 15;
+                } else {
+                    return 8 + projection([e.longitude, e.latitude])[0];
+                }
+                })
+                .attr('y', (e) => {
+                if (/Kennedy/.test(e.airport_name)) {
+                    return projection([e.longitude, e.latitude])[1];
+                } else if (/Newark/.test(e.airport_name)) {
+                    return projection([e.longitude, e.latitude])[1] - 10;
+                } else if (/Detroit/.test(e.airport_name)) {
+                    return projection([e.longitude, e.latitude])[1] - 12;
+                } else {
+                    return 10 + projection([e.longitude, e.latitude])[1];
+                }
+                })
+                .attr('font-size', 'xx-small');
+        });
+        
+        // create legend
+        //Append a defs (for definition) element to your SVG, the gredient bar needs to be inlcuded in this defs
+        var defs = svg.append("defs");
+
+        //Append a linearGradient element to the defs and give it a unique id
+        var linearGradient = defs.append("linearGradient")
+            .attr("id", "linear-gradient");
+
+        linearGradient
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "100%")
+        .attr("y2", "0%");
+
+        //Set the color for the start (0%)
+        linearGradient.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", "#FFFFFF"); //light blue
+
+        //Set the color for the end (100%)
+        linearGradient.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", '#066094'); //dark blue
+
+        var legend = svg.append('g')
+        .attr('class', "legend");
+
+        legend.append('rect')
+        .attr('x', '50')
+        .attr('y', '530')
+        .attr('width', '200')
+        .attr('height', '10')
+        .style("fill", "url(#linear-gradient)");
+
+        var colorScale = d3.scale.linear()
+        .domain([0, 1])
+        .range(['#FFFFFF', "#066094"]);
+
+        var xScale = d3.scale.linear()
+        .domain([0, 1])
+        .range([50, 250]);
+
+        legend.append('text')
+        // .attr("x", 50)
+        // .attr("y", 525)
+        .text("Percentage of Baseline")
+        .style('font-size', 'small')
+        .attr('transform', "translate(50, 525)");
+
+        //lenged axis
+        var xAxis = d3.svg.axis()
+        .orient("bottom")
+        .ticks(1)
+        .tickFormat(d3.format(".0%"))
+        .scale(xScale);
+
+        legend.append('g')
+        .attr('class', 'legend-axis')
+        .attr('transform', "translate(0, 540)")
+        .style('stroke-width', '0px') 
+        .call(xAxis);
+    </script>
+{% endblock %}

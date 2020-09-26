@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <title>Not Much</title>
+    {% block head %} {% endblock %}
 
 </head>
 
@@ -47,7 +48,7 @@
                     {% endif %}
                 {% endfor %}
             </table>
-        </div>
+        </div>      
     </section>
 
     <section class="graph">

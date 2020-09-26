@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -30,7 +35,7 @@ header {
     padding-bottom: 0.5%;
     background: white;
     text-align: center;
-    margin: 0 0 0 0.2%;
+    margin: 0 0 0 0.05vw;
 }
 
 .nav-sub:hover {
@@ -63,6 +68,10 @@ header {
     font-size: large;
 }
 
+.row-name {
+    padding-top: 3%;
+}
+
 .row-dt {
     padding-top: 3%;
 }
@@ -75,6 +84,11 @@ header {
     .covid-table {
         font-size: small;
     }
+
+    .row-name {
+        padding-top: 5%;
+    }
+    
 
     .row-dt {
         padding-top: 5%;

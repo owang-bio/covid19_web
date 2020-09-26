@@ -2,9 +2,9 @@
 
 {% block description%}
     <p> 
-        On the right, I put a brief summary about the number of cases and 
-        death. On the bottom it is plots showing how covid-19 has been 
-        impacting the traffic and border waiting time.
+        On the right, it is a brief summary about the number of cases and 
+        death. On the bottom it is plots showing how covid-19 may have been 
+        impacting the traffic, gas fill up and border waiting time.
     </p>
 {% endblock%}
 
@@ -17,7 +17,7 @@
     </div>
 
     <div class="plots">
-        
+        {% block plots %} {% endblock %}
     </div>
 
 {% endblock %}

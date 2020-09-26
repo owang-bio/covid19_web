@@ -8,7 +8,7 @@ def air_traffic():
     import os
     df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
     stat = df.tail(1).to_dict('records')[0]
-    return render_template('mobility/mobility.html', stat =  stat)
+    return render_template('mobility/mobility_pages/air.html', stat =  stat)
 
 @bp.route('/city')
 def city_congestion():
