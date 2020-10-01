@@ -12,7 +12,11 @@ def air_traffic():
 
 @bp.route('/city')
 def city_congestion():
-    pass
+    import pandas as pd
+    import os
+    df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
+    stat = df.tail(1).to_dict('records')[0]
+    return render_template('mobility/mobility_pages/city_congestion.html', stat =  stat)
 
 @bp.route('/border')
 def border_wait():

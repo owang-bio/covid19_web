@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 
 def create_app(test_config=None):
     # create and configure the app
@@ -24,11 +24,19 @@ def create_app(test_config=None):
     
     @app.route('/')
     def hello():
-        return render_template('base.html')
+        import pandas as pd
+        import os
+        df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
+        stat = df.tail(1).to_dict('records')[0]
+        return render_template('base.html', stat = stat)
     
     @app.template_filter()
     def num_format(value):
         return f'{value:,}'
+    
+    @app.route('/serve/<file_name>')
+    def serve_json(file_name):
+        return send_file(f'{os.getcwd()}/app/data/{file_name}.json')
     
     from . import mobility
     app.register_blueprint(mobility.bp)

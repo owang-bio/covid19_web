@@ -10,8 +10,8 @@
 
 {% block graph %}
     <div class="buttons">
-        <a href="#" class="mob-button">Air Traffic</a>
-        <a href="#" class="mob-button">City Congestion</a>
+        <a href="{{ url_for('mobility.air_traffic') }}" class="mob-button">Air Traffic</a>
+        <a href="{{ url_for('mobility.city_congestion') }}" class="mob-button">City Congestion</a>
         <a href="#" class="mob-button">Border Waiting Time</a>
         <a href="#" class="mob-button">Gas Fillup</a>
     </div>
