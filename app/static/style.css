@@ -119,3 +119,20 @@ header {
     display: flex;
     flex-direction: column;
 }
+
+/* for air traffic plot*/
+path {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: .5px;
+  }
+
+.domain {
+fill: none;
+stroke-width: 0px;
+}    
+
+circle:hover {
+fill: red;
+opacity: 0.3;
+}

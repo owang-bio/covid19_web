@@ -38,6 +38,14 @@ def create_app(test_config=None):
     def serve_json(file_name):
         return send_file(f'{os.getcwd()}/app/data/{file_name}.json')
     
+    @app.route('/test1')
+    def test1():
+        return 'Haha'
+    
+    @app.route('/test2')
+    def test2():
+        return 'Lala'
+    
     from . import mobility
     app.register_blueprint(mobility.bp)
 

@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v2.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v3.min.js"></script>
+{% endblock %}
+
 {% block description%}
     <p> 
         On the right, it is a brief summary about the number of cases and 
@@ -9,15 +17,23 @@
 {% endblock%}
 
 {% block graph %}
+
     <div class="buttons">
-        <a href="{{ url_for('mobility.air_traffic') }}" class="mob-button">Air Traffic</a>
-        <a href="{{ url_for('mobility.city_congestion') }}" class="mob-button">City Congestion</a>
-        <a href="#" class="mob-button">Border Waiting Time</a>
-        <a href="#" class="mob-button">Gas Fillup</a>
+        <a href="{{ url_for('mobility.air_traffic') }}" class="mob-button" id="air">
+            Air Traffic
+        </a>
+        
+        <a href="{{ url_for('mobility.city_congestion') }}" class="mob-button" id="city">
+            City Congestion
+        </a>
+        <a href="{{ url_for('mobility.border_wait') }}" class="mob-button">Border Waiting Time</a>
+        <a href="{{ url_for('mobility.fillup') }}" class="mob-button">Gas Fillup</a>
     </div>
 
-    <div class="plots">
-        {% block plots %} {% endblock %}
-    </div>
+    <div class="plots"></div>
+
+    <script src="{{ url_for('static', filename='/javascript/index.js') }}"></script>
+
+    <!-- <script src="{{ url_for('static', filename='javascript/air_geo.js') }}"></script> -->
 
 {% endblock %}
