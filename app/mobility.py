@@ -16,7 +16,7 @@ def air_traffic():
 
 @bp.route('/city')
 def city_congestion():
-    return render_template('mobility/mobility_pages/city_congestion.html', stat =  stat)
+    pass
 
 @bp.route('/border')
 def border_wait():

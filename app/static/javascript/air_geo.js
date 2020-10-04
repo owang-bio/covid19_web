@@ -2,7 +2,7 @@ var createMap = (data) => {
     var width = 900;
     var height = 600;
 
-    console.log(data);
+    // console.log(data);
     
     // projection & path generator
     // var path = d3.geo.path(); good for d3 v3 to create US map
@@ -47,6 +47,9 @@ var createMap = (data) => {
         .data(geojson.features)
         .enter()
         .append("path")
+        .attr('fill', '#ccc')
+        .attr('stroke', '#fff')
+        .attr('stroke-width', '.5px')
         .attr("d", path);
     
         // append points, label, tooltips
@@ -68,8 +71,12 @@ var createMap = (data) => {
         }
         })
         .attr('fill', (e) => colorScale(parseInt(e.percent_of_baseline)/100))
-        .on("mouseover", () => {
+        .on("mouseover", function() {
             tooltip.style("visibility", "visible");
+            // d3.select(this).attr({
+            //     fill: 'red',
+            //     opacity: 0.3
+            // });
         })
         .on("mousemove", function (e) {
 
@@ -83,7 +90,8 @@ var createMap = (data) => {
                 .style("left", (d3.event.pageX + 25) +"px")
                 ;
         })
-        .on("mouseout", () => {
+        .on("mouseout", function() {
+            // d3.select(this).attr('fill', (e) => colorScale(parseInt(e.percent_of_baseline)/100));
             return tooltip.style("visibility", "hidden");
         });
 
@@ -177,6 +185,8 @@ var createMap = (data) => {
 
     $('#main-title').text('Percentage of Air Traffic Compared With Baseline Before Covid-19');
     $('#sub-title').text('Hover Over the Airport to View the Percentage');
+    $('.domain').css('fill', 'none');
+
 }
 
 $(document).ready( () => {

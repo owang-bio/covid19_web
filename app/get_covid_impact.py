@@ -6,6 +6,7 @@ import os
 
 project = 'bigquery-281204'
 
+# air traffic
 query_air = """
 SELECT date
     , airport_name
@@ -26,3 +27,5 @@ json_obj = df.to_json(orient='records')
 with open(f'{os.getcwd()}/data/air.json', 'w') as file:
     for line in json_obj:
         file.write(line)
+        
+# city congestion
