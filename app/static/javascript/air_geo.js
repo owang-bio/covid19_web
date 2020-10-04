@@ -73,10 +73,6 @@ var createMap = (data) => {
         .attr('fill', (e) => colorScale(parseInt(e.percent_of_baseline)/100))
         .on("mouseover", function() {
             tooltip.style("visibility", "visible");
-            // d3.select(this).attr({
-            //     fill: 'red',
-            //     opacity: 0.3
-            // });
         })
         .on("mousemove", function (e) {
 
@@ -91,12 +87,11 @@ var createMap = (data) => {
                 ;
         })
         .on("mouseout", function() {
-            // d3.select(this).attr('fill', (e) => colorScale(parseInt(e.percent_of_baseline)/100));
             return tooltip.style("visibility", "hidden");
         });
 
         svg.append('g')
-            .attr('class', 'airpoirt')
+            .attr('class', 'airport-text')
             .selectAll('text')
             .data(data)
             .enter()

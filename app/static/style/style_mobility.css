@@ -10,7 +10,7 @@
     stroke-width: 0px;
 }     */
 
-circle:hover {
+.airport:hover {
     fill: red;
     opacity: 0.3;
 }
