@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 
 bp = Blueprint('mobility', __name__, url_prefix='/mobility')
 
@@ -12,18 +12,10 @@ def mob():
 
 @bp.route('/air')
 def air_traffic():
-    import pandas as pd
-    import os
-    df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
-    stat = df.tail(1).to_dict('records')[0]
-    return render_template('mobility/mobility_pages/air.html', stat =  stat)
+    return redirect(url_for('serve_json', file_name='air'))
 
 @bp.route('/city')
 def city_congestion():
-    import pandas as pd
-    import os
-    df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
-    stat = df.tail(1).to_dict('records')[0]
     return render_template('mobility/mobility_pages/city_congestion.html', stat =  stat)
 
 @bp.route('/border')

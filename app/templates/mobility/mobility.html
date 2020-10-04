@@ -6,6 +6,7 @@
     <script src="https://d3js.org/d3-array.v2.min.js"></script>
     <script src="https://d3js.org/d3-geo.v2.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v3.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/style_mobility.css') }}">
 {% endblock %}
 
 {% block description%}
@@ -14,25 +15,39 @@
         death. On the bottom it is plots showing how covid-19 may have been 
         impacting the traffic, gas fill up and border waiting time.
     </p>
+    <p style="text-align: left;">
+        Data Source: Google Bigquery covid19_geotab_mobility_impact.
+    </p>
 {% endblock%}
 
 {% block graph %}
 
     <div class="buttons">
-        <a href="{{ url_for('mobility.air_traffic') }}" class="mob-button" id="air">
+        <a href="air"  class="mob-button" id="air">
             Air Traffic
         </a>
         
-        <a href="{{ url_for('mobility.city_congestion') }}" class="mob-button" id="city">
+        <a href="city" class="mob-button" id="city">
             City Congestion
         </a>
-        <a href="{{ url_for('mobility.border_wait') }}" class="mob-button">Border Waiting Time</a>
-        <a href="{{ url_for('mobility.fillup') }}" class="mob-button">Gas Fillup</a>
+
+        <a href="border_wait" class="mob-button">
+            Border Waiting Time
+        </a>
+
+        <a href="fillup" class="mob-button">
+            Gas Fillup
+        </a>
+    </div>
+
+    <div class="plot-title" style="padding-top: 2%;">
+        <p id="main-title" style="text-align: center;"></p>
+        <p id="sub-title" style="text-align: center;font-size: 0.8em"></p>
     </div>
 
     <div class="plots"></div>
 
-    <script src="{{ url_for('static', filename='/javascript/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='/javascript/air_geo.js') }}"></script>
 
     <!-- <script src="{{ url_for('static', filename='javascript/air_geo.js') }}"></script> -->
 
