@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="//d3js.org/topojson.v1.min.js"></script>
+    <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://d3js.org/d3-array.v2.min.js"></script>
     <script src="https://d3js.org/d3-geo.v2.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v3.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style/style_mobility.css') }}">
 {% endblock %}
 
@@ -47,8 +49,7 @@
 
     <div class="plots"></div>
 
-    <script src="{{ url_for('static', filename='/javascript/air_geo.js') }}"></script>
-
-    <!-- <script src="{{ url_for('static', filename='javascript/air_geo.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='javascript/city_congest.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/air_geo.js') }}"></script>
 
 {% endblock %}

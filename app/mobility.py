@@ -16,7 +16,7 @@ def air_traffic():
 
 @bp.route('/city')
 def city_congestion():
-    pass
+    return 'cool'
 
 @bp.route('/border')
 def border_wait():
