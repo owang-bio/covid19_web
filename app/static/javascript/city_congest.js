@@ -1,4 +1,4 @@
-var cityCongestionPlot = () => {
+var cityCongestionPlot = (func) => {
 
     let data = Array.from(Array(24).keys());
 
@@ -13,7 +13,7 @@ var cityCongestionPlot = () => {
         .on('onchange', val => {
             d3.select('#value-simple')
                 .text('Select Hour: ' + val);
-            // func(val);
+            func(gSimple, val);
         });
 
     var gSimple = d3
@@ -35,16 +35,28 @@ var cityCongestionPlot = () => {
     d3.select('#value-simple')
         .text('Select Hour: ' + sliderSimple.value());
 
+    gSimple
+        .append('rect')
+        .attr('x', 20)
+        .attr('y', 70)
+        .attr('width', 20)
+        .attr('height', 0);
+
     $('#main-title').text('Percentage of City Congestion Compared With Baseline Before Covid-19');
     $('#sub-title').text('Select Hour to View The Percentage for Different Hours');
+}
 
+function updateLines(svg, data) {
+    svg.selectAll('rect')
+        .attr('height', data);
 }
 
 function creatLineChart(hour) {
     // get data
     let url = `mobility/city/${hour}`;
     d3.json(url)
-        .then()
+        .then(drawLines(data))
+        .catch((error) => console.log(error)); 
 }
 
 
@@ -54,7 +66,9 @@ $('#city').click(
         $(".plots").html("");
         $.ajax({
             url: "/mobility/city", 
-            success: cityCongestionPlot
+            success: () => {
+                cityCongestionPlot(updateLines);
+            }
         });
     }
 );
