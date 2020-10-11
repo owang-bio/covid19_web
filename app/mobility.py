@@ -21,7 +21,7 @@ def city_congestion():
 @bp.route('/city/<int:hour>')
 def serve_congestion_data(hour):
     df = pd.read_csv(f'{os.getcwd()}/app/data/city.csv')
-    df = df.query('hour == @hour')
+    df = df.query('hour == @hour').query('city_name == "Atlanta"')
     return df.to_json(orient='records')    
 
 @bp.route('/border')
