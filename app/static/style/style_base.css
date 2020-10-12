@@ -138,3 +138,15 @@ header {
     background-color: white;
     /* width: 70%; */
 }
+
+/* for geo map */
+.airport:hover {
+    fill: red;
+    opacity: 0.3;
+}
+
+/* for city congestion bar plot */
+.city-bar:hover {
+    fill: #03fcf4;
+    opacity: 0.5;
+}

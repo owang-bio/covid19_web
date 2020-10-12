@@ -18,10 +18,11 @@ def air_traffic():
 def city_congestion():
     return 'cool'
 
-@bp.route('/city/<int:hour>')
-def serve_congestion_data(hour):
+@bp.route('/city/<int:hour>/<string:city>')
+def serve_congestion_data(hour, city):
     df = pd.read_csv(f'{os.getcwd()}/app/data/city.csv')
-    df = df.query('hour == @hour').query('city_name == "Atlanta"')
+    df = df.query('hour == @hour').query('city_name == @city')
+    df['percent_congestion'] = df.percent_congestion / 100
     return df.to_json(orient='records')    
 
 @bp.route('/border')
