@@ -1,3 +1,12 @@
+var width = 900;
+var height = 600;
+var paddingX = 35;
+var slideTop = 30;
+var slideLeft = 30;
+var minX = paddingX - slideLeft;
+var maxX = width - paddingX;
+var plotWidth = maxX - minX;
+
 var cityCongestionPlot = (func) => {
     // append tooltip
     var tooltipBar = d3.select('#city-congestion-plot').append('div')
@@ -39,10 +48,11 @@ var cityCongestionPlot = (func) => {
     var gSimple = d3
         .select('#city-congestion-plot')
         .append('svg')
-        .attr('width', 900)
-        .attr('height', 600)
+        .attr('width', width)
+        .attr('height', height)
         .append('g')
-        .attr('transform', 'translate(30,30)');
+        .attr('transform', `translate(${slideLeft}, ${slideTop})`)
+        ;
 
     gSimple.call(sliderSimple);
 
@@ -64,13 +74,13 @@ var cityCongestionPlot = (func) => {
         'New York',
         'Seattle',
         'Washington'
-    ]
+    ];
 
     let dropSelection = d3.select('#city-congestion-plot')
         .append('label')
         .style('margin', '1em 0 0 1em')
         .attr('for', 'city-select')
-        .html('Choose a city: ')
+        .html('Choose a city: ');
 
     dropSelection
         .append('select')
@@ -82,10 +92,15 @@ var cityCongestionPlot = (func) => {
         .text((d) => d)
         .attr('value', (d) => d);
 
-    dropSelection.on('change', (val) => {
+    dropSelection.on('change', () => {
         let city = $('#selected-city').val();
         let hour = sliderSimple.value();
-        console.log(city + hour);
+
+        let url = `city/${hour}/${city}`;
+            d3.json(url)
+                .then( (data) => {
+                    func(gSimple, data);
+                });
     });
 
     // create initial plot
@@ -97,16 +112,17 @@ var cityCongestionPlot = (func) => {
     $('#sub-title').text('Select Hour and City to View The Percentage');
 }
 
-function creatBarChart(svg, hour, city, tooltipBar) {
+var creatBarChart = (svg, hour, city, tooltipBar) => {
+
+    console.log(minX, maxX);
 
     let url = `city/${hour}/${city}`;
 
     d3.json(url)
         .then( (data) => {
 
-            let paddingX = 30;
             let xScale = d3.scaleLinear()
-                .range([paddingX - 30, 900 - paddingX])
+                .range([minX, maxX])
                 .domain([
                     d3.min(data, (d) => new Date(d.date)), 
                     d3.max(data, (d) => new Date(d.date))
@@ -114,20 +130,17 @@ function creatBarChart(svg, hour, city, tooltipBar) {
             
             let yScale = d3.scaleLinear()
                 .range([500, 100])
-                .domain([
-                    d3.min(data, (d) => d.percent_congestion),
-                    d3.max(data, (d) => d.percent_congestion)
-                ]);
+                .domain([0, 1]);
 
             svg.selectAll('rect')
                 .data(data)
                 .enter()
                 .append('rect')
                 .attr('class', 'city-bar')
-                .attr('x', (d, i) => 860/data.length * i)
+                .attr('x', (d, i) => plotWidth/data.length * i + minX)
                 .attr('y', (d) => yScale(d.percent_congestion))
                 .attr('height', (d) => 500 - yScale(d.percent_congestion))
-                .attr('width', 860/data.length)
+                .attr('width', plotWidth/data.length)
                 .attr('fill', '#066094')
                 .on("mouseover", function() {
                     tooltipBar.style("visibility", "visible");
@@ -136,6 +149,7 @@ function creatBarChart(svg, hour, city, tooltipBar) {
                     // d = new Date(parseInt(e.date));
                     return tooltipBar.html(
                         "<p>Date: " + d.date + "</p>"
+                        + `<p> City: ${d.city_name}</p>`
                         + "<p>Percentage of baseline: " 
                         + Math.round(d.percent_congestion*10000)/100 + "%</p>"
                         + `<p>Hour: ${d.hour}:00`)
@@ -157,7 +171,7 @@ function creatBarChart(svg, hour, city, tooltipBar) {
                 .attr('class', 'axis')
                 .attr(
                     'transform',
-                    `translate(${paddingX - 30}, 500)`
+                    `translate(${0}, 500)`
                 )
                 .call(xAxis)
 
@@ -170,7 +184,7 @@ function creatBarChart(svg, hour, city, tooltipBar) {
                 .attr('class', 'axis')
                 .attr(
                     'transform',
-                    `translate(${paddingX - 30}, 0)`
+                    `translate(${minX}, 0)`
                 )
                 .call(yAxis)
                 ;
@@ -179,29 +193,32 @@ function creatBarChart(svg, hour, city, tooltipBar) {
 
 }
 
-function updateLineChart(svg, data) {
+var updateLineChart = (svg, data) => {
 
     // specify y scale
     let yScale = d3.scaleLinear()
         .range([500, 100])
-        .domain([
-            d3.min(data, (d) => d.percent_congestion),
-            d3.max(data, (d) => d.percent_congestion)
-        ]);
+        .domain([0, 1]);
     
     // update existing (x, y, height), enter new and add all attributes, exit bar if data no longer exists
-    svg.selectAll('rect')
+    svg
+        .selectAll('rect')
         .data(data)
-        .attr('x', (d, i) => 860/data.length * i)
+        .transition()
+        .duration(1000)
+        .attr('x', (d, i) => plotWidth/data.length * i + minX)
         .attr('y', (d) => yScale(d.percent_congestion))
         .attr('height', (d) => 500 - yScale(d.percent_congestion))
+        ;
+
+    svg
         .enter()
         .append('rect')
         .attr('class', 'city-bar')
-        .attr('x', (d, i) => 860/data.length * i)
+        .attr('x', (d, i) => plotWidth/data.length * i + minX) 
         .attr('y', (d) => yScale(d.percent_congestion))
         .attr('height', (d) => 500 - yScale(d.percent_congestion))
-        .attr('width', 860/data.length)
+        .attr('width', plotWidth/data.length)
         .attr('fill', '#066094')
         .on("mouseover", function() {
             tooltipBar.style("visibility", "visible");
@@ -210,6 +227,7 @@ function updateLineChart(svg, data) {
             // d = new Date(parseInt(e.date));
             return tooltipBar.html(
                 "<p>Date: " + d.date + "</p>"
+                + `<p> City: ${d.city_name}</p>`
                 + "<p>Percentage of baseline: " 
                 + Math.round(d.percent_congestion*10000)/100 + "%</p>"
                 + `<p>Hour: ${d.hour}:00`)
@@ -220,6 +238,9 @@ function updateLineChart(svg, data) {
         .on("mouseout", function() {
             return tooltipBar.style("visibility", "hidden");
         })
+        ;
+
+    svg
         .exit()
         .remove()
         ;

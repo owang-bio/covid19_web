@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, send_file
+from flask import Flask, render_template, send_file, redirect, url_for
 
 def create_app(test_config=None):
     # create and configure the app
@@ -24,11 +24,12 @@ def create_app(test_config=None):
     
     @app.route('/')
     def hello():
-        import pandas as pd
-        import os
-        df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
-        stat = df.tail(1).to_dict('records')[0]
-        return render_template('base.html', stat = stat)
+        # import pandas as pd
+        # import os
+        # df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
+        # stat = df.tail(1).to_dict('records')[0]
+        # return render_template('base.html', stat = stat)
+        return redirect(url_for('mobility.mob'))
     
     @app.template_filter()
     def num_format(value):
