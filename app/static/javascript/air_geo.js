@@ -179,14 +179,6 @@ var createMap = (data) => {
     $('#main-title').text('Percentage of Air Traffic Compared With Baseline Before Covid-19');
     $('#sub-title').text('Hover Over the Airport to View the Percentage for ' + d.toLocaleDateString());
 
-    
-    // // console.log(d.toLocaleDateString());    
-    // $('.domain').css('fill', 'none');
-    // d3.select('.plots')
-    //     .append('div')
-    //     .attr('class', 'plot-desc')
-    //     .html(`<p> Date: ${d.toLocaleDateString()} </p>` 
-    //         + '<br> <p> add some description here later!</p>');
 }
 
 $(document).ready( () => {
@@ -203,7 +195,10 @@ $('#air').click(
         $(".plots").html("");
         $.ajax({
             url: "/mobility/air", 
-            success: createMap
+            success: (data) => {
+                createMap(data);
+                $(window).scrollTop(500);
+            }
         });
     }
 );

@@ -261,6 +261,7 @@ $('#city').click(
             url: "/mobility/city", 
             success: () => {
                 cityCongestionPlot(updateLineChart);
+                $(window).scrollTop(500);
             }
         });
     }
