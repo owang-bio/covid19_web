@@ -44,3 +44,25 @@ order by city_name, date_time
 query_job = client.query(query_city)
 df = query_job.to_dataframe()
 df.to_csv(f'{os.getcwd()}/data/city.csv', index=False)
+
+# gas fillup
+query_gas = """
+with temp as (
+  SELECT * replace(
+      percent_of_normal_volume / 100 as percent_of_normal_volume
+    , replace(country_iso_code_2, 'US-', '') as country_iso_code_2
+    )
+  FROM `bigquery-public-data.covid19_geotab_mobility_impact.fuel_station_weekly_fillups`
+  WHERE country_iso_code_2 like "US-%"
+  order by week_start
+)
+select week_start as date
+  , country_iso_code_2 as code
+  , percent_of_normal_volume as percentage
+from temp
+;
+"""
+query_job = client.query(query_gas)
+df = query_job.to_dataframe()
+df.to_csv(f'{os.getcwd()}/data/gas.csv', index=False)
+

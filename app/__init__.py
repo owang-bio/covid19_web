@@ -23,12 +23,7 @@ def create_app(test_config=None):
         pass
     
     @app.route('/')
-    def hello():
-        # import pandas as pd
-        # import os
-        # df = pd.read_csv(f'{os.getcwd()}/app/data/covid19_stat.csv')
-        # stat = df.tail(1).to_dict('records')[0]
-        # return render_template('base.html', stat = stat)
+    def index():
         return redirect(url_for('mobility.mob'))
     
     @app.template_filter()

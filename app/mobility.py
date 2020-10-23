@@ -16,7 +16,7 @@ def air_traffic():
 
 @bp.route('/city')
 def city_congestion():
-    return 'cool'
+    return 'Success'
 
 @bp.route('/city/<int:hour>/<string:city>')
 def serve_congestion_data(hour, city):
@@ -25,10 +25,14 @@ def serve_congestion_data(hour, city):
     df['percent_congestion'] = df.percent_congestion / 100
     return df.to_json(orient='records')    
 
-@bp.route('/border')
-def border_wait():
-    pass
-
 @bp.route('/gas')
 def fillup():
-    pass
+    df = pd.read_csv(f'{os.getcwd()}/app/data/gas.csv')
+    df_id = pd.read_table(f'{os.getcwd()}/app/data/us_state_id.txt')
+    date = df.iloc[df.shape[0] - 1, 0]
+    df = (
+        df.query('date == @date')
+            .merge(df_id, on = 'code')
+        )
+    return df.to_json(orient='records')
+

@@ -114,8 +114,6 @@ var cityCongestionPlot = (func) => {
 
 var creatBarChart = (svg, hour, city, tooltipBar) => {
 
-    console.log(minX, maxX);
-
     let url = `city/${hour}/${city}`;
 
     d3.json(url)
@@ -150,7 +148,7 @@ var creatBarChart = (svg, hour, city, tooltipBar) => {
                     return tooltipBar.html(
                         "<p>Date: " + d.date + "</p>"
                         + `<p> City: ${d.city_name}</p>`
-                        + "<p>Percentage of baseline: " 
+                        + "<p>Percentage of Baseline: " 
                         + Math.round(d.percent_congestion*10000)/100 + "%</p>"
                         + `<p>Hour: ${d.hour}:00`)
                         .style("top", (event.pageY - 150) +"px")
@@ -190,7 +188,6 @@ var creatBarChart = (svg, hour, city, tooltipBar) => {
                 ;
         })
         .catch((error) => console.log(error)); 
-
 }
 
 var updateLineChart = (svg, data) => {
@@ -200,7 +197,7 @@ var updateLineChart = (svg, data) => {
         .range([500, 100])
         .domain([0, 1]);
     
-    // update existing (x, y, height), enter new and add all attributes, exit bar if data no longer exists
+    // update existing (x, y, height)
     svg
         .selectAll('rect')
         .data(data)
@@ -211,6 +208,7 @@ var updateLineChart = (svg, data) => {
         .attr('height', (d) => 500 - yScale(d.percent_congestion))
         ;
 
+    // enter new and add all attributes
     svg
         .enter()
         .append('rect')
@@ -240,6 +238,7 @@ var updateLineChart = (svg, data) => {
         })
         ;
 
+    // exit bar if data no longer exists
     svg
         .exit()
         .remove()

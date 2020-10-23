@@ -15,7 +15,7 @@ var createMap = (data) => {
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        // .attr('viewBox', '200 0 900 600')
+        // .attr('viewBox', '150 0 1200 800')
         ;
     
     // prepare tooltip
@@ -32,11 +32,12 @@ var createMap = (data) => {
 
     // geo map 
     // var url = "https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json";
-    var url = "/serve/usmap";
+    let url = "/serve/usmap";
     d3.json(url)
         .then( function(topology) {
                 // convert topojson to geojson
-                var geojson = topojson.feature(topology, topology.objects.states);
+                let geojson = topojson.feature(topology, topology.objects.states);
+                // console.log(geojson);
         
                 // draw map                
                 svg.append('g')
@@ -119,10 +120,10 @@ var createMap = (data) => {
     
     // create legend
     //Append a defs (for definition) element to your SVG, the gredient bar needs to be inlcuded in this defs
-    var defs = svg.append("defs");
+    let defs = svg.append("defs");
     
     //Append a linearGradient element to the defs and give it a unique id
-    var linearGradient = defs.append("linearGradient")
+    let linearGradient = defs.append("linearGradient")
         .attr("id", "linear-gradient");
     
     linearGradient
@@ -141,7 +142,7 @@ var createMap = (data) => {
         .attr("offset", "100%")
         .attr("stop-color", '#066094'); //dark blue
     
-    var legend = svg.append('g')
+    let legend = svg.append('g')
         .attr('class', "legend");
     
     legend.append('rect')
@@ -151,11 +152,11 @@ var createMap = (data) => {
         .attr('height', '10')
         .style("fill", "url(#linear-gradient)");
     
-    var colorScale = d3.scaleLinear()
+    let colorScale = d3.scaleLinear()
         .domain([0, 1])
         .range(['#FFFFFF', "#066094"]);
     
-    var xScale = d3.scaleLinear()
+    let xScale = d3.scaleLinear()
         .domain([0, 1])
         .range([50, 250]);
     
@@ -165,7 +166,7 @@ var createMap = (data) => {
         .attr('transform', "translate(50, 525)");
     
     //lenged axis
-    var xAxis = d3.axisBottom(xScale)
+    let xAxis = d3.axisBottom(xScale)
         .ticks(1)
         .tickFormat(d3.format(".0%"))
     
