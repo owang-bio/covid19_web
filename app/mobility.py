@@ -36,3 +36,8 @@ def fillup():
         )
     return df.to_json(orient='records')
 
+@bp.route('/gas/<string:state_code>')
+def state_gas_data(state_code):
+    df = pd.read_csv(f'{os.getcwd()}/app/data/gas.csv')
+    return df.query('code == @state_code').to_json(orient='records')
+    

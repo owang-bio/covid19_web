@@ -150,3 +150,9 @@ header {
     fill: #03fcf4;
     opacity: 0.5;
 }
+
+/* for gas fill up geo map */
+.gas-shape:hover {
+    fill: #ffe25e;
+    opacity: 0.5;
+}
