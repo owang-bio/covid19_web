@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='pic/favicon.png') }}">
-    <title>Not Much</title>
+    <title>My Site</title>
     {% block head %} {% endblock %}
 
 </head>
@@ -15,9 +15,9 @@
     <header>
         <h1 id="title">Just Another Site about Covid-19</h1>
         <nav class="nav-bar">
-            <h4 class="nav-sub">Impact on Traffic</h6>
-            <h4 class="nav-sub">US Facts</h6>
-            <h4 class="nav-sub">Symptom Forcast</h6>
+            <a class="nav-sub" id="traffic" href="{{ url_for('mobility.mob')}}">Impact on Traffic</a>
+            <h4 class="nav-sub" id="usfact">US Facts</h4>
+            <h4 class="nav-sub" id="symptom">Symptom Forcast</h4>
         </nav>
     </header>
 
@@ -27,7 +27,8 @@
                 I built this site because I have been following the spreading 
                 of Covid-19 in the US, and I was curious about how the 
                 Covide-19 has been impacting our life. Also, I was a little 
-                tired of going to the other people's sites to gather information. 
+                tired of going to the other people's sites to gather information, 
+                and interactive plots are fun to look at... 
             </p>
             {% block description%}{% endblock %}
         </div>
@@ -56,6 +57,8 @@
     <section class="graph">
         {% block graph %}{% endblock %}
     </section>
+
+    <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
 
 </body>
 </html>

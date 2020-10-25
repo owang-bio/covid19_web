@@ -49,7 +49,7 @@ var geoMapGas = (data) => {
                 .append('svg')
                 .attr("width", width)
                 .attr("height", height)
-                .attr('viewBox', '-200 0 1200 800');
+                .attr('viewBox', '-100 0 1200 800');
 
             gasMapToolTip = d3.select('#geo-gas')
                 .append('div')
@@ -64,12 +64,11 @@ var geoMapGas = (data) => {
                 .style("font-size", "small");
 
             gasMap.append('g')
-                .attr('class', 'gas-map')
                 .selectAll("path")
                 .data(geojson.features)
                 .enter()
                 .append("path")
-                .attr('class', 'gas-shape')
+                .attr('class', 'gas-shape gas-state')
                 .attr('fill', e => colorScale(e.percentage))
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '.5px')
@@ -83,7 +82,7 @@ var geoMapGas = (data) => {
                         "<p>Date: " + e.date + "</p>"
                         + "<p>State: " + e.state + "</p>"
                         + "<p>Percentage of baseline: " 
-                        + e.percentage*100 + "%</p>")
+                        + Math.round(e.percentage*10000)/100 + "%</p>")
                         .style("top", (event.pageY - 25) +"px")
                         .style("left", (event.pageX + 25) +"px")
                         ;
@@ -170,7 +169,7 @@ var barGas = (data) => {
 
     data = JSON.parse(data);
 
-    let width = 600;
+    let width = 550;
     let height = 350;
     let paddingX = 40;
     let paddingY = 50;
@@ -229,7 +228,7 @@ var barGas = (data) => {
                 "<p>Date: " + e.date + "</p>"
                 + "<p>State: " + e.code + "</p>"
                 + "<p>Percentage of baseline: " 
-                + e.percentage*100 + "%</p>")
+                + Math.round(e.percentage*10000)/100 + "%</p>")
                 .style("top", (event.pageY - 25) +"px")
                 .style("left", (event.pageX + 25) +"px")
                 ;
@@ -270,7 +269,7 @@ var barGas = (data) => {
         .text(`Selected State: ${data[0].code}`)
         .attr(
             'transform',
-            'translate(290, 330)'
+            'translate(250, 330)'
         )
         ;
 }
@@ -279,7 +278,7 @@ var updateGasBar = (data) => {
 
     data = JSON.parse(data);
 
-    let width = 600;
+    let width = 550;
     let height = 350;
     let paddingX = 40;
     let paddingY = 50;
@@ -310,8 +309,8 @@ var updateGasBar = (data) => {
         .transition()
         .duration(1000)
         .attr('x', (d, i) => i * barWidth + paddingX)
-        .attr('y', (d) => yScale(d.percentage) - paddingY)
-        .attr('height', (d) => height - yScale(d.percentage))
+        .attr('y', (d) => yScale(d.percentage))
+        .attr('height', (d) => height - yScale(d.percentage) - paddingY)
         .attr('width', barWidth)
         ;
     
@@ -321,9 +320,9 @@ var updateGasBar = (data) => {
         .append('rect')
         .attr('class', 'gas-shape')
         .attr('x', (d, i) => i * barWidth + paddingX)
-        .attr('y', (d) => height - yScale(d.percentage) - paddingY)
+        .attr('y', (d) => yScale(d.percentage))
         .attr('width', barWidth)
-        .attr('height', d => yScale(d.percentage))
+        .attr('height', d => heigt - yScale(d.percentage) - paddingY)
         .attr('fill', "#fc0000")
         .style('opacity', '0.3')
         .on("mouseover", function() {
@@ -335,7 +334,7 @@ var updateGasBar = (data) => {
                 "<p>Date: " + e.date + "</p>"
                 + "<p>State: " + e.code + "</p>"
                 + "<p>Percentage of baseline: " 
-                + e.percentage*100 + "%</p>")
+                + Math.round(e.percentage*10000)/100 + "%</p>")
                 .style("top", (event.pageY - 25) +"px")
                 .style("left", (event.pageX + 25) +"px")
                 ;
@@ -396,15 +395,15 @@ $('#gas').click(
         d3.select('#gas-fillup')
             .append('div')
             .attr('id', 'geo-gas')
-            .attr('padding', '0 3%')
-            .style('width', '44vw')
+            .style('padding', '2% 5% 0 0')
+            .style('width', '40vw')
             ;
 
         d3.select('#gas-fillup')
             .append('div')
             .attr('id', 'bar-gas')
-            .attr('padding', '0 3%')
-            .style('width', '44vw')
+            .style('padding', '0 0 0 3%')
+            .style('width', '40vw')
             ;
 
         $.ajax({

@@ -36,6 +36,10 @@ header {
     background: white;
     text-align: center;
     margin: 0 0 0 0.05vw;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
 }
 
 .nav-sub:hover {
@@ -155,4 +159,8 @@ header {
 .gas-shape:hover {
     fill: #ffe25e;
     opacity: 0.5;
+}
+
+.gas-state {
+    cursor: pointer;
 }
