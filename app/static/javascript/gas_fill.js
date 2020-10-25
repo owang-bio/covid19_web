@@ -33,6 +33,8 @@ var geoMapGas = (data) => {
 
             let width = 675;
             let height = 450;
+            let paddingX = 50;
+            let paddingY = -80;
 
             let colorScale = d3.scaleLinear()
                 .domain([
@@ -45,7 +47,7 @@ var geoMapGas = (data) => {
                 .append('svg')
                 .attr("width", width)
                 .attr("height", height)
-                .attr('viewBox', '-250 0 1200 800');
+                .attr('viewBox', '-200 0 1200 800');
 
             gasMapToolTip = d3.select('#geo-gas')
                 .append('div')
@@ -79,17 +81,82 @@ var geoMapGas = (data) => {
                         "<p>Date: " + e.date + "</p>"
                         + "<p>State: " + e.state + "</p>"
                         + "<p>Percentage of baseline: " 
-                        + Math.round(e.percentage*100)/100 + "%</p>")
+                        + e.percentage*100 + "%</p>")
                         .style("top", (event.pageY - 25) +"px")
                         .style("left", (event.pageX + 25) +"px")
                         ;
                 })
                 .on("mouseout", function() {
                     return gasMapToolTip.style("visibility", "hidden");
-                });
-        });
+                })
+                .on('click', (e, d) => {
+                    let url = `/mobility/gas/${d.code}`;
+                    $.ajax({
+                        url: url, 
+                        success: updateGasBar
+                    });
+                })
+                ;
 
-    // let d = new Date(data[0].date);
+             // create legend
+            //Append a defs (for definition) element to your SVG, the gredient bar needs to be inlcuded in this defs
+            let defs = gasMap.append("defs");
+            
+            //Append a linearGradient element to the defs and give it a unique id
+            let linearGradient = defs.append("linearGradient")
+                .attr("id", "linear-gradient");
+            
+            linearGradient
+                .attr("x1", "0%")
+                .attr("y1", "0%")
+                .attr("x2", "100%")
+                .attr("y2", "0%");
+            
+            //Set the color for the start (0%)
+            linearGradient.append("stop")
+                .attr("offset", "0%")
+                .attr("stop-color", "#FFFFFF"); //white
+            
+            //Set the color for the end (100%)
+            linearGradient.append("stop")
+                .attr("offset", "100%")
+                .attr("stop-color", '#fc0000'); //dark red
+            
+            let legend = gasMap.append('g')
+                .attr('class', "legend");
+            
+            legend.append('rect')
+                .attr('x', paddingX)
+                .attr('y', height - paddingY)
+                .attr('width', '200')
+                .attr('height', '10')
+                .style("fill", "url(#linear-gradient)");
+            
+            legend.append('text')
+                .text("Percentage of Baseline")
+                .style('font-size', 'small')
+                .attr('transform', `translate(${paddingX}, ${height - paddingY})`);
+            
+            let xScale = d3.scaleLinear()
+                .domain([
+                    0, 
+                    d3.max(data, d => d.percentage)])
+                .range([0, 200]);
+
+            //lenged axis
+            let xAxisLegend = d3.axisBottom(xScale)
+                .ticks(1)
+                .tickFormat(d3.format(".0%"))
+            
+            legend.append('g')
+                .attr('class', 'legend-axis')
+                .attr('transform', `translate(${paddingX}, ${height - paddingY})`)
+                .style('stroke-width', '0px') 
+                .call(xAxisLegend);
+                }
+    );
+
+
     $('#main-title').text('Percentage of Gas Fillup Compared With Baseline Before Covid-19' 
         +  ` (Week of ${data[0].date})`);
     $('#sub-title').text('Click on the State to View the Time Series Data on Right');
@@ -101,24 +168,25 @@ var barGas = (data) => {
 
     data = JSON.parse(data);
 
-    let width = 675;
-    let height = 450;
-    padding = 20;
-    let barWidth = (width - padding * 2) / data.length;
+    let width = 600;
+    let height = 350;
+    let paddingX = 40;
+    let paddingY = 50;
+    let barWidth = (width - paddingX * 2) / data.length;
 
     let xScale = d3.scaleLinear()
         .domain([
             d3.min(data, (d) => new Date(d.date)), 
             d3.max(data, (d) => new Date(d.date))
         ])
-        .range([padding, width - padding]);
+        .range([paddingX, width - paddingX]);
 
     let yScale = d3.scaleLinear()
     .domain([
-        d3.min(data, (d) => d.percentage), 
+        0, 
         d3.max(data, (d) => d.percentage)
     ])
-    .range([height - padding, padding]);
+    .range([height - paddingY, paddingY]);
 
     gasBarToolTip = d3.select('#bar-gas')
         .append('div')
@@ -134,21 +202,22 @@ var barGas = (data) => {
         
     let bar = d3.select('#bar-gas')
         .append('svg')
+        .attr('id', 'gas-bar-plot')
         .attr("width", width)
         .attr("height", height)
-        .attr('viewBox', '-150 0 1200 800');
+        // .attr('viewBox', '-100 0 1200 800');
 
     bar.selectAll('rect')
         .data(data)
         .enter()
         .append('rect')
         .attr('class', 'gas-shape')
-        .attr('x', (d, i) => i * barWidth + padding)
-        .attr('y', (d) => height - yScale(d.percentage))
+        .attr('x', (d, i) => i * barWidth + paddingX)
+        .attr('y', (d) => yScale(d.percentage))
         .attr('width', barWidth)
-        .attr('height', d => yScale(d.percentage))
+        .attr('height', d => height - yScale(d.percentage) - paddingY)
         .attr('fill', "#fc0000")
-        .style('opacity', '0.5')
+        .style('opacity', '0.3')
         .on("mouseover", function() {
             gasBarToolTip.style("visibility", "visible");
         })
@@ -158,16 +227,154 @@ var barGas = (data) => {
                 "<p>Date: " + e.date + "</p>"
                 + "<p>State: " + e.code + "</p>"
                 + "<p>Percentage of baseline: " 
-                + Math.round(e.percentage*100)/100 + "%</p>")
+                + e.percentage*100 + "%</p>")
                 .style("top", (event.pageY - 25) +"px")
                 .style("left", (event.pageX + 25) +"px")
                 ;
         })
         .on("mouseout", function() {
             return gasBarToolTip.style("visibility", "hidden");
-        });
+        })
         ;
 
+    let xAxis = d3.axisBottom(xScale)
+        .ticks(2)
+        .tickFormat(d3.timeFormat("%Y/%m/%d"))
+        ;
+
+    let yAxis = d3.axisLeft(yScale)
+        .ticks(2)
+        .tickFormat(d3.format('.0%'))
+        ;
+    
+    bar.append('g')
+        .attr('class', 'xaxis')
+        .attr(
+            'transform',
+            `translate(${0}, ${height -  paddingY})`
+        )
+        .call(xAxis);
+
+    bar.append('g')
+        .attr('class', 'yaxis')
+        .attr(
+            'transform',
+            `translate(${paddingX}, ${0})`
+        )
+        .call(yAxis);
+
+    bar.append('text')
+        .attr('id', 'selected-state')
+        .text(`Selected State: ${data[0].code}`)
+        .attr(
+            'transform',
+            'translate(290, 330)'
+        )
+        ;
+}
+
+var updateGasBar = (data) => {
+
+    data = JSON.parse(data);
+
+    let width = 600;
+    let height = 350;
+    let paddingX = 40;
+    let paddingY = 50;
+    let barWidth = (width - paddingX * 2) / data.length;
+
+    svg = d3.select('#gas-bar-plot');
+
+    // specify y scale
+    let xScale = d3.scaleLinear()
+        .domain([
+            d3.min(data, (d) => new Date(d.date)), 
+            d3.max(data, (d) => new Date(d.date))
+        ])
+        .range([paddingX, width - paddingX]);
+
+     // specify y scale
+    let yScale = d3.scaleLinear()
+        .domain([
+            0, 
+            d3.max(data, (d) => d.percentage)
+        ])
+        .range([height - paddingY, paddingY]);
+ 
+    // update existing (x, y, height)
+    svg
+        .selectAll('rect')
+        .data(data)
+        .transition()
+        .duration(1000)
+        .attr('x', (d, i) => i * barWidth + paddingX)
+        .attr('y', (d) => yScale(d.percentage) - paddingY)
+        .attr('height', (d) => height - yScale(d.percentage))
+        .attr('width', barWidth)
+        ;
+    
+    // enter new and add all attributes
+    svg
+        .enter()
+        .append('rect')
+        .attr('class', 'gas-shape')
+        .attr('x', (d, i) => i * barWidth + paddingX)
+        .attr('y', (d) => height - yScale(d.percentage) - paddingY)
+        .attr('width', barWidth)
+        .attr('height', d => yScale(d.percentage))
+        .attr('fill', "#fc0000")
+        .style('opacity', '0.3')
+        .on("mouseover", function() {
+            gasBarToolTip.style("visibility", "visible");
+        })
+        .on("mousemove", function (event, e) {
+
+            return gasBarToolTip.html(
+                "<p>Date: " + e.date + "</p>"
+                + "<p>State: " + e.code + "</p>"
+                + "<p>Percentage of baseline: " 
+                + e.percentage*100 + "%</p>")
+                .style("top", (event.pageY - 25) +"px")
+                .style("left", (event.pageX + 25) +"px")
+                ;
+        })
+        .on("mouseout", function() {
+            return gasBarToolTip.style("visibility", "hidden");
+        })
+        .on('click', (e) => {
+            let url = `/mobility/gas/${e.code}`;
+            console.log(url);
+            $.ajax({
+                url: url, 
+                success: updateGasBar
+            });
+        })
+        ;
+
+    // exit bar if data no longer exists
+    svg
+        .exit()
+        .remove()
+        ;
+
+    let xAxis = d3.axisBottom(xScale)
+    .ticks(2)
+    .tickFormat(d3.timeFormat("%Y/%m/%d"))
+    ;
+
+    let yAxis = d3.axisLeft(yScale)
+        .ticks(2)
+        .tickFormat(d3.format('.0%'))
+        ;
+    
+    svg.select('.xaxis')
+        .call(xAxis);
+
+    svg.select('.yaxis')
+        .call(yAxis);
+
+    d3.select('#selected-state')
+        .text(`Selected State: ${data[0].code}`)
 }
 
 $('#gas').click(
@@ -180,19 +387,23 @@ $('#gas').click(
             .attr('id', 'gas-fillup')
             .style('grid-column', '1 / 4')
             .style('display', 'flex')
-            .style('flex-direction', 'row');
+            .style('flex-direction', 'row')
+            .style('padding-top', '3%')
+            ;
         
         d3.select('#gas-fillup')
             .append('div')
             .attr('id', 'geo-gas')
             .attr('padding', '0 3%')
-            .style('width', '44vw');
+            .style('width', '44vw')
+            ;
 
         d3.select('#gas-fillup')
             .append('div')
             .attr('id', 'bar-gas')
             .attr('padding', '0 3%')
-            .style('width', '44vw');
+            .style('width', '44vw')
+            ;
 
         $.ajax({
             url: "/mobility/gas", 
@@ -205,6 +416,7 @@ $('#gas').click(
             url: "/mobility/gas/AL", 
             success: (data) => {
                 barGas(data);
+                $(window).scrollTop(999);
             }
         });
     }

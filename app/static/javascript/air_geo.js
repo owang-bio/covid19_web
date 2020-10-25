@@ -198,7 +198,7 @@ $('#air').click(
             url: "/mobility/air", 
             success: (data) => {
                 createMap(data);
-                $(window).scrollTop(500);
+                $(window).scrollTop(999);
             }
         });
     }
