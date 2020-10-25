@@ -33,6 +33,7 @@ def fillup():
     df = (
         df.query('date == @date')
             .merge(df_id, on = 'code')
+            .query('code != "VI"')
         )
     return df.to_json(orient='records')
 

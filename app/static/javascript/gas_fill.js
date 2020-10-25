@@ -1,7 +1,7 @@
 var geoMapGas = (data) => {
 
     data = JSON.parse(data);
-    // console.log(data);
+    console.log(data);
     
     // get map data
     let url = "/serve/usmap";
@@ -36,12 +36,14 @@ var geoMapGas = (data) => {
             let paddingX = 50;
             let paddingY = -80;
 
+            console.log(d3.max(data, (d) => d.percentage));
+            
             let colorScale = d3.scaleLinear()
                 .domain([
                     0, 
-                    d3.max(data, d => d.percentage)
+                   d3.max(data, (d) => d.percentage)
                 ])
-                .range(['#FFFFFF', "#fc0000"]);
+                .range(['#FFFFFF', "#f06c6c"]);
 
             gasMap = d3.select('#geo-gas')
                 .append('svg')
@@ -120,7 +122,7 @@ var geoMapGas = (data) => {
             //Set the color for the end (100%)
             linearGradient.append("stop")
                 .attr("offset", "100%")
-                .attr("stop-color", '#fc0000'); //dark red
+                .attr("stop-color", '#f06c6c'); //dark red
             
             let legend = gasMap.append('g')
                 .attr('class', "legend");
@@ -135,7 +137,7 @@ var geoMapGas = (data) => {
             legend.append('text')
                 .text("Percentage of Baseline")
                 .style('font-size', 'small')
-                .attr('transform', `translate(${paddingX}, ${height - paddingY})`);
+                .attr('transform', `translate(${paddingX}, ${height - paddingY - 5})`);
             
             let xScale = d3.scaleLinear()
                 .domain([
@@ -145,12 +147,12 @@ var geoMapGas = (data) => {
 
             //lenged axis
             let xAxisLegend = d3.axisBottom(xScale)
-                .ticks(1)
+                .ticks(3)
                 .tickFormat(d3.format(".0%"))
             
             legend.append('g')
                 .attr('class', 'legend-axis')
-                .attr('transform', `translate(${paddingX}, ${height - paddingY})`)
+                .attr('transform', `translate(${paddingX}, ${height - paddingY  + 5})`)
                 .style('stroke-width', '0px') 
                 .call(xAxisLegend);
                 }
