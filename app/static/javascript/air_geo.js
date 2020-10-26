@@ -77,7 +77,7 @@ var createMap = (data) => {
         
                     d = new Date(parseInt(e.date));
                     return tooltip.html(
-                        "<p>Date: " + d.toLocaleDateString() + "</p>"
+                        "<p>Date: " + d.toISOString().slice(0, 10) + "</p>"
                         + "<p>Airport: " + e.airport_name + "</p>"
                         + "<p>Percentage of baseline: " 
                         + Math.round(e.percent_of_baseline*100)/100 + "%</p>")
@@ -178,7 +178,8 @@ var createMap = (data) => {
 
     let d = new Date(parseInt(data[0].date));
     $('#main-title').text('Percentage of Air Traffic Compared With Baseline Before Covid-19');
-    $('#sub-title').text('Hover Over the Airport to View the Percentage for ' + d.toLocaleDateString());
+    $('#sub-title').text('Hover Over the Airport to View the Percentage for ' 
+        + d.toISOString().slice(0, 10));
 
 }
 

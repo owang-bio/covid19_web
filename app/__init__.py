@@ -36,5 +36,5 @@ def create_app(test_config=None):
     
     from . import mobility
     app.register_blueprint(mobility.bp)
-
+    
     return app
