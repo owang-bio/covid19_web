@@ -79,7 +79,7 @@ var geoMapGas = (data) => {
                 .on("mousemove", function (event, e) {
 
                     return gasMapToolTip.html(
-                        "<p>Date: " + e.date + "</p>"
+                        "<p>Week of: " + e.date + "</p>"
                         + "<p>State: " + e.state + "</p>"
                         + "<p>Percentage of baseline: " 
                         + Math.round(e.percentage*10000)/100 + "%</p>")
