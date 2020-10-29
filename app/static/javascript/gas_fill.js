@@ -160,7 +160,7 @@ var geoMapGas = (data) => {
 
     $('#main-title').text('Percentage of Gas Fillup Compared With Baseline Before Covid-19' 
         +  ` (Week of ${data[0].date})`);
-    $('#sub-title').text('Click on the State to View the Time Series Data on Right');
+    $('#sub-title').text('Click on the State on The Map to View the Time Series Data on Right');
 
 }
 
